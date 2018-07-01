@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserRepository {
 
     /**
-     * 新增或跟更新用户
+     * 新增或更新用户
      * @param user
      * @return
      */
