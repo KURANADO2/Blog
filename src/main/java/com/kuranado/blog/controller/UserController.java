@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping
     public ModelAndView listUser(Model model) {
         model.addAttribute("title", "查看所有用户");
-        model.addAttribute("userList", userRepository.listUser());
+        model.addAttribute("userList", userRepository.findAll());
         // 路径会自动补上 templates/，所以不要再 users 前加 /，否则将会报错：An error happened during template parsing (template: "class path resource [templates//users/list.html]")
         return new ModelAndView("users/list", "userModel", model);
     }
@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping("/form")
     public ModelAndView craeteUser(Model model) {
         model.addAttribute("title", "创建用户");
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new User(null, null, null));
         return new ModelAndView("users/form", "userModel", model);
     }
 
@@ -57,7 +57,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ModelAndView viewUserById(@PathVariable Long id, Model model) {
         model.addAttribute("title", "根据 id 查看单个用户");
-        model.addAttribute("user", userRepository.getUserById(id));
+        model.addAttribute("user", userRepository.findById(id).get());
         return new ModelAndView("users/view", "userModel", model);
     }
 
@@ -68,7 +68,7 @@ public class UserController {
      */
     @GetMapping("/delete/{id}")
     public ModelAndView deleteUserById(@PathVariable Long id) {
-        userRepository.deleteUser(id);
+        userRepository.deleteById(id);
         return new ModelAndView("redirect:/users");
     }
 
@@ -81,7 +81,7 @@ public class UserController {
     @GetMapping("/modify/{id}")
     public ModelAndView modifyUserById(@PathVariable Long id, Model  model) {
         model.addAttribute("title", "修改用户");
-        model.addAttribute("user", userRepository.getUserById(id));
+        model.addAttribute("user", userRepository.findById(id).get());
         return new ModelAndView("users/form", "userModel", model);
     }
 
@@ -92,7 +92,7 @@ public class UserController {
      */
     @PostMapping
     public ModelAndView saveOrUpdateUser(User user) {
-        userRepository.saveOrUpdateUser(user);
+        userRepository.save(user);
         return new ModelAndView("redirect:/users");
     }
 }
